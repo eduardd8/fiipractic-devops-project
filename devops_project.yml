@@ -1,0 +1,30 @@
+---
+- name: DevOps Project
+  hosts: myserver
+  become: yes
+
+  tasks:
+  - name: Install required packages
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+
+  - name: Install Docker on second machine
+    shell: >
+      curl https://get.docker.com | bash && \
+      systemctl start docker && \
+      systemctl enable docker
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+
+  - name: Start and enable Docker service
+    systemd:
+      name: docker
+      state: started
+      enabled: true
+
