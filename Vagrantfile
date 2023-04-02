@@ -28,4 +28,28 @@ Vagrant.configure("2") do |config|
       SHELL
   end
 
+  config.vm.define :myvmproject2 do |myvmproject2_config|
+    myvmproject2_config.vm.provider "virtualbox" do |vb|
+        vb.memory = "1024"
+        vb.cpus = 2
+        vb.name = "My-VM-Project-vm2"
+    end
+    myvmproject2_config.vm.host_name = 'myvmproject2'
+    myvmproject2_config.vm.box = "#{os}"
+    myvmproject2_config.vm.network "private_network", ip: "#{net}.12"
+    myvmproject2_config.vm.provision "shell", inline: <<-SHELL
+    echo "root:myvmproject2" | chpasswd
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    systemctl restart sshd
+    yum install -y git
+    yum install -y telnet
+    yum install -y wget
+    yum install -y vim
+    yum install -y net-tools
+    yum install -y rng-tools
+    yum install -y unzip
+    mkdir /home/vagrant/shared
+    SHELL
+end
+
 end
