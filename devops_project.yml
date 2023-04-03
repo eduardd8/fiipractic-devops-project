@@ -59,3 +59,18 @@
       ansible_ssh_host: 192.168.111.12
       ansible_python_interpreter: /usr/bin/python3
 
+  - name: Pull SonarQube container
+    docker_container:
+      name: sonarqube
+      image: sonarqube
+      state: started
+      pull: true
+      published_ports:
+        - "9000:9000"
+      container_default_behavior: "no_defaults"
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+      ansible_python_interpreter: /usr/bin/python3
+
+
