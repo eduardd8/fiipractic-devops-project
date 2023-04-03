@@ -12,6 +12,8 @@
       - yum-utils
       - device-mapper-persistent-data
       - lvm2
+      - epel-release
+      - python3-pip
 
   - name: Install Docker on second machine
     shell: >
@@ -22,9 +24,38 @@
     vars:
       ansible_ssh_host: 192.168.111.12
 
+
   - name: Start and enable Docker service
     systemd:
       name: docker
       state: started
       enabled: true
+
+  - name: Install requests module
+    pip:
+      name: requests
+      state: present
+    become: yes
+    vars:
+      ansible_python_interpreter: /usr/bin/python3
+
+  - name: Install Docker SDK for Python
+    pip:
+      name: docker
+      executable: pip3
+    become: yes 
+
+  - name: Pull Jenkins container
+    docker_container:
+      name: jenkins
+      image: jenkins/jenkins:lts
+      state: started
+      pull: true
+      published_ports:
+        - "8080:8080"
+      container_default_behavior: "no_defaults" 
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+      ansible_python_interpreter: /usr/bin/python3
 
