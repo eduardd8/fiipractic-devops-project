@@ -73,4 +73,31 @@
       ansible_ssh_host: 192.168.111.12
       ansible_python_interpreter: /usr/bin/python3
 
+  - name: Pull Nginx container
+    docker_container:
+      name: nginx
+      image: nginx
+      state: started
+      pull: true
+      published_ports:
+        - "80:80"
+      container_default_behavior: "no_defaults"
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+      ansible_python_interpreter: /usr/bin/python3
+
+  - name: Copy index.html to target node
+    copy:
+      src: /root/PROJECT/fiipractic-devops-project/index.html
+      dest: /tmp/index.html
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+
+  - name: Copy index.html to Nginx container
+    shell: docker cp /tmp/index.html nginx:/usr/share/nginx/html/
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
 
