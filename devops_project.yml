@@ -101,3 +101,30 @@
     vars:
       ansible_ssh_host: 192.168.111.12
 
+  - name: Pull Prometheus container
+    docker_container:
+      name: prometheus
+      image: prom/prometheus
+      state: started
+      published_ports:
+        - "9090:9090"
+      container_default_behavior: "no_defaults"
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+      ansible_python_interpreter: /usr/bin/python3
+
+  - name: Pull Grafana container
+    docker_container:
+      name: grafana
+      image: grafana/grafana
+      state: started
+      published_ports:
+        - "3000:3000"
+      container_default_behavior: "no_defaults"
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+      ansible_python_interpreter: /usr/bin/python3
+
+
