@@ -126,5 +126,27 @@
     vars:
       ansible_ssh_host: 192.168.111.12
       ansible_python_interpreter: /usr/bin/python3
+  
+ 
+  - name: Configure Grafana datasource for Prometheus 
+    uri:
+      url: http://192.168.111.12:3000/api/datasources
+      method: POST
+      headers:
+        Authorization: Bearer {{ grafana_api_key }}
+      body: '{"name":"Prometheus","type":"prometheus","url":"http://prometheus:9090","access":"proxy","isDefault":true,"jsonData":{"timeInterval":"5s","httpMethod":"POST","keepCookies":[]},"secureJsonData":{"password":""}}'
+      body_format: json
+      return_content: yes
+      status_code: 200
+    vars:
+      grafana_api_key: eyJrIjoiSDRvZ0ZTNEFFazBYM1k3MXlXcE5OY1IzWURKcTluVXAiLCJuIjoiZ3JhZmFuYV9hcGlfa2V5MSIsImlkIjoxfQ==
 
 
+
+ 
+   
+
+
+   
+    
+    
