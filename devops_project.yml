@@ -150,14 +150,12 @@
     vars:
       grafana_api_key: eyJrIjoiSDRvZ0ZTNEFFazBYM1k3MXlXcE5OY1IzWURKcTluVXAiLCJuIjoiZ3JhZmFuYV9hcGlfa2V5MSIsImlkIjoxfQ==
 
-  - name: Copy Dockerfile and application code to target node 
-    tags: test 
+  - name: Copy Dockerfile and application code to target node  
     copy: 
       src: /root/PROJECT/fiipractic-devops-project/Dockerfile
       dest: /tmp 
 
   - name: Build custom Docker image
-    tags: test
     vars:
       ansible_python_interpreter: /usr/bin/python3
     docker_image:
@@ -169,7 +167,6 @@
       state: present
 
   - name: Start mycustomcontainer
-    tags: test
     docker_container: 
       name: mycustomcontainer
       image: mycustomimage
