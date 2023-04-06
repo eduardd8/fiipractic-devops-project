@@ -45,6 +45,15 @@
       executable: pip3
     become: yes 
 
+  - name: Add nameserver entries to resolv.conf
+    become: true
+    lineinfile:
+      path: /etc/resolv.conf
+      line: "{{ item }}"
+    with_items:
+      - "nameserver 8.8.4.4"
+      - "nameserver 8.8.8.8"
+
   - name: Pull Jenkins container
     docker_container:
       name: jenkins
@@ -141,12 +150,41 @@
     vars:
       grafana_api_key: eyJrIjoiSDRvZ0ZTNEFFazBYM1k3MXlXcE5OY1IzWURKcTluVXAiLCJuIjoiZ3JhZmFuYV9hcGlfa2V5MSIsImlkIjoxfQ==
 
+  - name: Copy Dockerfile and application code to target node 
+    tags: test 
+    copy: 
+      src: /root/PROJECT/fiipractic-devops-project/Dockerfile
+      dest: /tmp 
+
+  - name: Build custom Docker image
+    tags: test
+    vars:
+      ansible_python_interpreter: /usr/bin/python3
+    docker_image:
+      name: mycustomimage
+      build:
+        path: /tmp
+        dockerfile: Dockerfile
+      source: build
+      state: present
+
+  - name: Start mycustomcontainer
+    tags: test
+    docker_container: 
+      name: mycustomcontainer
+      image: mycustomimage
+      state: started
+      published_ports: 
+        - "8888:80"
+        - "8844:80"
+      container_default_behavior: "no_defaults"
+    become: yes
+    vars:
+      ansible_ssh_host: 192.168.111.12
+      ansible_python_interpreter: /usr/bin/python3
 
 
- 
-   
-
-
-   
     
-    
+
+
+
