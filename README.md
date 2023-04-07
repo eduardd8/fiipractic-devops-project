@@ -2,7 +2,7 @@
 
 This project is aimed at creating an Ansible playbook that provisions a virtual machine, installs Docker on the machine, and raises a container with Jenkins, among other things. This playbook sets up an environment for developing, testing, and deploying applications using containers. The containers include Jenkins for continuous integration and deployment, SonarQube for code quality analysis, Nginx for serving static files, Prometheus for monitoring, and Grafana for visualizing metrics. It also demonstrates how to build a custom Docker image and copy files between the remote machine and the host machine.
 
-The playbook is written in YAML and is intended to be executed using Ansible. It assumes that the remote machine has Ansible installed and is configured to allow SSH access.
+The playbook is written in YAML and is intended to be executed using Ansible. It assumes that the remote machine has Ansible installed and is configured to allow SSH access. In addition to installing Ansible on the remote machine, this project also installs Docker on the control node using the shell module and installs the requests module using pip.
 
 # What this Vagrant file does
 
@@ -27,10 +27,3 @@ The devops_project.yml file contains a set of tasks that are executed in order t
 13. Configure Grafana datasource for Prometheus
 14. Copy Dockerfile and application code to the target node
 15. Build a custom Docker image.
-
-
-
-
-
-
-
